@@ -1,0 +1,18 @@
+### create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "username": "testuser3",
+  "password": "123456",
+  "email": "testuser3@test.com",
+  "role": "MEMBER"
+}
+
+### get user
+GET http://localhost:8080/users/1
+Content-Type: application/json
+
+### get all
+GET http://localhost:8080/users
+Content-Type: application/json
