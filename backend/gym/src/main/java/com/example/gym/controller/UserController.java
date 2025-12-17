@@ -1,6 +1,8 @@
 package com.example.gym.controller;
 
-import com.example.gym.entity.User;
+import com.example.gym.dto.UserCreateDTO;
+import com.example.gym.dto.UserResponseDTO;
+import com.example.gym.dto.UserUpdateDTO;
 import com.example.gym.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,34 +11,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    // CREATE
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public UserResponseDTO create(@RequestBody UserCreateDTO dto) {
+        return userService.createUser(dto);
     }
 
+    // READ ONE
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id){
+    public UserResponseDTO getById(@PathVariable Long id) {
         return userService.getById(id);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user){
-        return userService.updateUser(id, user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){
-        userService.delete(id);
-    }
-
+    // READ ALL
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAll() {
         return userService.getAll();
     }
 
+    // UPDATE
+    @PutMapping("/{id}")
+    public UserResponseDTO update(
+            @PathVariable Long id,
+            @RequestBody UserUpdateDTO dto
+    ) {
+        return userService.updateUser(id, dto);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
 }

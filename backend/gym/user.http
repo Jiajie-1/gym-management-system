@@ -3,9 +3,9 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "username": "testuser3",
+  "username": "testuser4",
   "password": "123456",
-  "email": "testuser3@test.com",
+  "email": "testuser4@test.com",
   "role": "MEMBER"
 }
 
@@ -16,3 +16,12 @@ Content-Type: application/json
 ### get all
 GET http://localhost:8080/users
 Content-Type: application/json
+
+###update
+PUT http://localhost:8080/users/1
+Content-Type: application/json
+
+{
+"username": "member1_updated",
+"email": "member1_new@test.com"
+}
