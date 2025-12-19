@@ -1,58 +1,43 @@
-.page-header {
+.users-page {
+  padding: 24px;
+}
+
+.users-toolbar {
+  display: flex;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
-.page-header h2 {
-  margin: 0;
-  font-size: 22px;
+.users-toolbar input {
+  padding: 8px;
+  width: 260px;
 }
 
-/* Card */
-.card {
-  background: white;
-  border-radius: 6px;
-  padding: 16px;
-  width: 100%;                 
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+.users-toolbar button {
+  padding: 8px 14px;
+  cursor: pointer;
 }
 
-
-/* Table */
-.user-table {
+.users-table {
   width: 100%;
   border-collapse: collapse;
+  background: white;
 }
 
-.user-table th,
-.user-table td {
+.users-table th,
+.users-table td {
   padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #ddd;
   text-align: left;
 }
 
-.user-table th {
-  background-color: #f9fafb;
-  font-weight: 600;
+.users-table th {
+  background: #f5f6f8;
 }
 
-.user-table tr:hover {
-  background-color: #f3f4f6;
-}
-
-/* Role Badge */
-.role {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.role.admin {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-
-.role.member {
-  background-color: #dbeafe;
-  color: #1e40af;
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }

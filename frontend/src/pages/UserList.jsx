@@ -1,59 +1,89 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Layout from "../layout/layout";
-import { getAllUsers } from "../api/userApi";
+import { getUsersPage } from "../api/userApi";
 import "../css/userlist.css";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [keyword, setKeyword] = useState("");
+
+  const loadUsers = async () => {
+    const data = await getUsersPage({
+      page,
+      size: 5,
+      keyword,
+    });
+    setUsers(data.content);
+    setTotalPages(data.totalPages);
+  };
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [page]);
 
-  const loadUsers = async () => {
-    const res = await getAllUsers();
-    setUsers(res.data);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleSearch = () => {
+    setPage(0);
+    loadUsers();
   };
 
   return (
-    <Layout onLogout={handleLogout}>
-      <div className="page-header">
-        <h2>Users</h2>
+    <div className="users-page">
+      <h2>Users</h2>
+
+      {/*  Search */}
+      <div className="users-toolbar">
+        <input
+          type="text"
+          placeholder="Search by username or email"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
       </div>
 
-      <div className="card">
-        <table className="user-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
+      {/*  Table */}
+      <table className="users-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u) => (
+            <tr key={u.id}>
+              <td>{u.id}</td>
+              <td>{u.username}</td>
+              <td>{u.email}</td>
+              <td>{u.role}</td>
             </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u.id}>
-                <td>{u.id}</td>
-                <td>{u.username}</td>
-                <td>{u.email}</td>
-                <td>
-                  <span className={`role ${u.role.toLowerCase()}`}>
-                    {u.role}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          ))}
+        </tbody>
+      </table>
+
+      {/*  Pagination */}
+      <div className="pagination">
+        <button
+          disabled={page === 0}
+          onClick={() => setPage(page - 1)}
+        >
+          Prev
+        </button>
+
+        <span>
+          Page {page + 1} / {totalPages}
+        </span>
+
+        <button
+          disabled={page + 1 >= totalPages}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
-    </Layout>
+    </div>
   );
 }
