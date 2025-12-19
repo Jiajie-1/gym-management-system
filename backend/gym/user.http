@@ -1,14 +1,4 @@
-### create user
-POST http://localhost:8080/users
-Content-Type: application/json
-
-{
-  "username": "secureuser1",
-  "password": "123456",
-  "email": "secure1@test.com"
-}
-
-###LOGIN
+### ===== Login as MEMBER =====
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
@@ -16,4 +6,31 @@ Content-Type: application/json
   "username": "secureuser",
   "password": "123456"
 }
+
+> {%
+    client.global.set("memberToken", response.body.token);
+%}
+
+### ===== MEMBER tries to access ADMIN endpoint =====
+GET http://localhost:8080/users
+Authorization: Bearer {{memberToken}}
+
+### ===== Login as ADMIN =====
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "adminuser",
+  "password": "123456"
+}
+
+> {%
+    client.global.set("adminToken", response.body.token);
+%}
+
+### ===== ADMIN accesses ADMIN endpoint =====
+GET http://localhost:8080/users
+Authorization: Bearer {{adminToken}}
+
+
 

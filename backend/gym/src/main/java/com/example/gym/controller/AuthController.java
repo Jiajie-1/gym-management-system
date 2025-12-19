@@ -43,7 +43,11 @@ public class AuthController {
             );
         }
 
-        String token = JwtUtil.generateToken(user.getUsername());
+        String token = JwtUtil.generateToken(
+                user.getUsername(),
+                user.getRole().name()
+        );
+
         return new LoginResponseDTO(token);
     }
 }
