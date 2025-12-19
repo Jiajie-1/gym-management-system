@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -19,21 +20,24 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // CREATE
     public UserResponseDTO createUser(UserCreateDTO dto) {
+
         User user = new User();
         user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
         user.setEmail(dto.getEmail());
         user.setRole(Role.MEMBER);
 
-        User saved = userRepository.save(user);
-        return toResponseDTO(saved);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        return toResponseDTO(userRepository.save(user));
     }
 
     // READ ONE
@@ -118,4 +122,5 @@ public class UserService {
                 )
                 .map(this::toResponseDTO);
     }
+
 }

@@ -3,57 +3,17 @@ POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "username": "testuser4",
+  "username": "secureuser1",
   "password": "123456",
-  "email": "testuser4@test.com",
-  "role": "MEMBER"
+  "email": "secure1@test.com"
 }
 
-### get user
-GET http://localhost:8080/users/1
-Content-Type: application/json
-
-### get all
-GET http://localhost:8080/users
-Content-Type: application/json
-
-###update
-PUT http://localhost:8080/users/1
-Content-Type: application/json
-
-### Login - get JWT token
+###LOGIN
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "username": "testuser4",
+  "username": "secureuser",
   "password": "123456"
 }
 
-> {%
-    client.global.set("token", response.body.token);
-%}
-
-### Get all users (JWT protected)
-GET http://localhost:8080/users
-Authorization: Bearer {{token}}
-
-### Get users with pagination
-GET http://localhost:8080/users/page?page=0&size=2
-Authorization: Bearer {{token}}
-
-###
-GET http://localhost:8080/users/page?page=0&size=2
-Authorization: Bearer {{token}}
-
-###search
-GET http://localhost:8080/users/page?keyword=test
-Authorization: Bearer {{token}}
-
-###sort
-GET http://localhost:8080/users/page?sortBy=username&direction=desc
-Authorization: Bearer {{token}}
-
-###
-GET http://localhost:8080/users/page?page=0&size=2&keyword=test&sortBy=email&direction=asc
-Authorization: Bearer {{token}}
