@@ -42,3 +42,18 @@ Authorization: Bearer {{token}}
 GET http://localhost:8080/users/page?page=0&size=2
 Authorization: Bearer {{token}}
 
+###
+GET http://localhost:8080/users/page?page=0&size=2
+Authorization: Bearer {{token}}
+
+###search
+GET http://localhost:8080/users/page?keyword=test
+Authorization: Bearer {{token}}
+
+###sort
+GET http://localhost:8080/users/page?sortBy=username&direction=desc
+Authorization: Bearer {{token}}
+
+###
+GET http://localhost:8080/users/page?page=0&size=2&keyword=test&sortBy=email&direction=asc
+Authorization: Bearer {{token}}

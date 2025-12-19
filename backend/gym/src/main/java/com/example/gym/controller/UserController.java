@@ -58,8 +58,13 @@ public class UserController {
     @GetMapping("/page")
     public Page<UserResponseDTO> getUsersPaged(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
     ) {
-        return userService.getUsersPaged(page, size);
+        return userService.getUsersPagedWithSearchAndSort(
+                page, size, keyword, sortBy, direction
+        );
     }
 }
