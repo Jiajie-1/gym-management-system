@@ -5,6 +5,7 @@ import com.example.gym.dto.UserResponseDTO;
 import com.example.gym.dto.UserUpdateDTO;
 import com.example.gym.entity.Role;
 import com.example.gym.entity.User;
+import com.example.gym.exception.ResourceNotFoundException;
 import com.example.gym.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,8 @@ public class UserService {
     // UPDATE
     public UserResponseDTO updateUser(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+
 
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
