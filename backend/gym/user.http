@@ -21,5 +21,21 @@ Content-Type: application/json
 PUT http://localhost:8080/users/1
 Content-Type: application/json
 
+### Login - get JWT token
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser4",
+  "password": "123456"
+}
+
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+### Get all users (JWT protected)
+GET http://localhost:8080/users
+Authorization: Bearer {{token}}
 
 
