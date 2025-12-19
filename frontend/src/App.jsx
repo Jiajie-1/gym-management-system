@@ -1,24 +1,18 @@
-import { useState } from "react";
-import UserForm from "./components/UserForm";
-import UserList from "./components/UserList";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
 
-function App() {
-  const [editingUser, setEditingUser] = useState(null);
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const refresh = () => {
-    setEditingUser(null);
-    setRefreshKey((prev) => prev + 1);
-  };
-
-  return (
-    <div style={{ padding: "20px" }}>
-      <h1>Gym Management System</h1>
-
-      <UserForm selectedUser={editingUser} onSuccess={refresh} />
-      <UserList key={refreshKey} onEdit={setEditingUser} />
-    </div>
-  );
+function Users() {
+  return <h2>User List (Admin Only)</h2>;
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
