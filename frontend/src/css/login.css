@@ -1,0 +1,72 @@
+/* 确保整个页面可居中 */
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/* 强制全屏居中（不受任何外层布局影响） */
+.login-wrapper {
+  position: fixed;
+  inset: 0;
+  background: #f4f6f8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 登录卡片 */
+.login-card {
+  width: 360px;
+  background: white;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 标题 */
+.login-title {
+  text-align: center;
+  margin: 0 0 10px;
+}
+
+/* 输入框 */
+.login-input {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* 按钮 */
+.login-button {
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 4px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background: #1d4ed8;
+}
+
+/* 错误提示 */
+.login-error {
+  color: #dc2626;
+  text-align: center;
+  font-size: 14px;
+}
+

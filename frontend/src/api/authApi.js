@@ -1,8 +1,5 @@
-import api from "./axios";
+import publicApi from "./publicApi";
 
-export const login = (username, password) => {
-  return api.post("/auth/login", {
-    username,
-    password,
-  });
+export const login = (data) => {
+  return publicApi.post("/auth/login", data);
 };

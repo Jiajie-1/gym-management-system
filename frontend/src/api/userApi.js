@@ -1,19 +1,16 @@
-import axios from "axios";
-
-const BASE_URL = "http://localhost:8080/users";
+import api from "./axios";
 
 export const getAllUsers = () => {
-  return axios.get(BASE_URL);
+  return api.get("/users");
 };
 
-export const createUser = (user) => {
-  return axios.post(BASE_URL, user);
-};
+export const getUsersPaged = (page = 0, size = 10, keyword = "", sortBy = "id", direction = "asc") => {
+  const params = new URLSearchParams();
+  params.append("page", page);
+  params.append("size", size);
+  if (keyword) params.append("keyword", keyword);
+  if (sortBy) params.append("sortBy", sortBy);
+  if (direction) params.append("direction", direction);
 
-export const updateUser = (id, user) => {
-  return axios.put(`${BASE_URL}/${id}`, user);
-};
-
-export const deleteUser = (id) => {
-  return axios.delete(`${BASE_URL}/${id}`);
+  return api.get(`/users/page?${params.toString()}`);
 };

@@ -1,9 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
+import UserList from "./pages/UserList.jsx";
 
-function Users() {
-  return <h2>User List (Admin Only)</h2>;
-}
 
 export default function App() {
   return (
@@ -11,7 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/users" element={<UserList />} />
       </Routes>
     </BrowserRouter>
   );
