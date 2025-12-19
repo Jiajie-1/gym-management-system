@@ -8,6 +8,9 @@ import com.example.gym.entity.User;
 import com.example.gym.exception.ResourceNotFoundException;
 import com.example.gym.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -68,7 +71,6 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    // ===== DTO Mapper（Junior 级完全够用）=====
     private UserResponseDTO toResponseDTO(User user) {
         return new UserResponseDTO(
                 user.getId(),
@@ -76,5 +78,13 @@ public class UserService {
                 user.getEmail(),
                 user.getRole()
         );
+    }
+
+    public Page<UserResponseDTO> getUsersPaged(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return userRepository.findAll(pageable)
+                .map(this::toResponseDTO);
     }
 }

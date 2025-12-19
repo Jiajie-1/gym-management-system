@@ -6,6 +6,8 @@ import com.example.gym.dto.UserUpdateDTO;
 import com.example.gym.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -51,5 +53,13 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    @GetMapping("/page")
+    public Page<UserResponseDTO> getUsersPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
+    ) {
+        return userService.getUsersPaged(page, size);
     }
 }
