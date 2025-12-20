@@ -1,30 +1,41 @@
+import { Link, useNavigate } from "react-router-dom";
 import "../css/layout.css";
 
-export default function Layout({ children, onLogout }) {
+export default function Layout({ children }) {
+  const navigate = useNavigate();
+
+  // Clear auth token and redirect to login
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="app-layout">
-      {/* Top Bar */}
+      {/* Top navigation bar */}
       <header className="topbar">
-        <div className="topbar-left">Gym Management System</div>
-        <div className="topbar-right">
-          <button className="logout-btn" onClick={onLogout}>
-            Logout
-          </button>
-        </div>
+        <h1>Gym Management System</h1>
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
       </header>
 
-      {/* Body */}
       <div className="layout-body">
-        {/* Sidebar */}
+        {/* Sidebar navigation */}
         <aside className="sidebar">
-          <div className="sidebar-title">Admin Panel</div>
           <nav>
-            <div className="nav-item active">Users</div>
-            {}
+            <ul>
+              <li><Link to="/dashboard">Dashboard</Link></li>
+              <li><Link to="/courses">Courses</Link></li>
+              <li><Link to="/trainers">Trainers</Link></li>
+              <li><Link to="/bookings">Bookings</Link></li>
+              <li><Link to="/profile">Profile</Link></li>
+              <li><Link to="/users">Users</Link></li>
+            </ul>
           </nav>
         </aside>
 
-        {/* Main Content */}
+        {/* Main content area */}
         <main className="main-content">
           {children}
         </main>
