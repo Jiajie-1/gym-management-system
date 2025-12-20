@@ -32,5 +32,19 @@ Content-Type: application/json
 GET http://localhost:8080/users
 Authorization: Bearer {{adminToken}}
 
+### Get all courses
+GET http://localhost:8080/courses
+Authorization: Bearer {{admintoken}}
+
+### Create course (Admin only)
+POST http://localhost:8080/courses
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Personal Training",
+  "type": "ONE_TO_ONE",
+  "capacity": 1
+}
 
 
