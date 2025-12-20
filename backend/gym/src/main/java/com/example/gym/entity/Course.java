@@ -1,34 +1,69 @@
 package com.example.gym.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "courses")
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Course name
-    @Column(nullable = false)
-    private String name;
+    private String title;
 
-    // Course type: ONE_TO_ONE or GROUP
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CourseType type;
-
-    // Course start time
     private LocalDateTime startTime;
 
-    // Max capacity for GROUP courses
-    private Integer capacity;
+    private Integer durationMinutes;
+
+    @Enumerated(EnumType.STRING)
+    private CourseType type;
+
+    @ManyToOne
+    @JoinColumn(name = "trainer_id")
+    private User trainer;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(Integer durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public CourseType getType() {
+        return type;
+    }
+
+    public void setType(CourseType type) {
+        this.type = type;
+    }
+
+    public User getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(User trainer) {
+        this.trainer = trainer;
+    }
 }

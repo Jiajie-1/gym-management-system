@@ -44,7 +44,24 @@ Content-Type: application/json
 {
   "name": "Personal Training",
   "type": "ONE_TO_ONE",
-  "capacity": 1
+  "capacity": 2
 }
 
+### Create trainer user (Admin only)
+POST http://localhost:8080/users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "trainer1_john",
+  "password": "123456",
+  "email": "trainer1.john@gym.com",
+  "role": "TRAINER"
+}
+###
+GET http://localhost:8080/users/trainers
+Authorization: Bearer {{adminToken}}
+###
+GET http://localhost:8080/courses
+Authorization: Bearer {{adminToken}}
 

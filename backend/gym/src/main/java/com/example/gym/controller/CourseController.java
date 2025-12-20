@@ -1,7 +1,9 @@
 package com.example.gym.controller;
 
-import com.example.gym.entity.Course;
+import com.example.gym.dto.CreateCourseRequestDTO;
+import com.example.gym.dto.CourseResponseDTO;
 import com.example.gym.service.CourseService;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,16 +19,14 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    // All authenticated users can view courses
-    @GetMapping
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
-    }
-
-    // Only ADMIN can create courses
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public Course createCourse(@RequestBody Course course) {
-        return courseService.createCourse(course);
+    public CourseResponseDTO createCourse(@Valid @RequestBody CreateCourseRequestDTO dto) {
+        return courseService.createCourse(dto);
+    }
+
+    @GetMapping
+    public List<CourseResponseDTO> getAllCourses() {
+        return courseService.getAllCourses();
     }
 }

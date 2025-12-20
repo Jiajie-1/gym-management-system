@@ -1,10 +1,13 @@
 package com.example.gym.controller;
 
+import com.example.gym.dto.TrainerDTO;
 import com.example.gym.dto.UserCreateDTO;
 import com.example.gym.dto.UserResponseDTO;
 import com.example.gym.dto.UserUpdateDTO;
+import com.example.gym.entity.Role;
 import com.example.gym.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,4 +70,12 @@ public class UserController {
                 page, size, keyword, sortBy, direction
         );
     }
+
+    // Provide trainer list for admin course scheduling
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/trainers")
+    public List<TrainerDTO> getTrainers() {
+        return userService.getAllTrainers();
+    }
+
 }

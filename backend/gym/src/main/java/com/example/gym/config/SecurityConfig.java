@@ -11,27 +11,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
-
-@EnableMethodSecurity
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // Enable CORS support
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // Disable CSRF for stateless API
+                // Disable CSRF because we are using JWT
                 .csrf(csrf -> csrf.disable())
 
-                // Use stateless session management
+                // Stateless session management
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -42,63 +40,37 @@ public class SecurityConfig {
                         // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Public authentication endpoints
+                        // Authentication endpoints
                         .requestMatchers("/auth/**").permitAll()
 
-                        // Course browsing and booking
+                        // User management (ADMIN only)
+                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+
+                        // Courses endpoints (authenticated users)
+                        .requestMatchers(HttpMethod.GET, "/courses").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/courses").hasRole("ADMIN")
                         .requestMatchers("/courses/**").authenticated()
 
-                        // Booking endpoints
-                        .requestMatchers("/bookings/**").authenticated()
-
-                        // Profile endpoints
-                        .requestMatchers("/profile/**").authenticated()
-
-                        // Admin-only user management
-                        .requestMatchers("/users/**").hasRole("ADMIN")
-
-                        // All other requests require authentication
+                        // Any other request must be authenticated
                         .anyRequest().authenticated()
                 )
 
                 // Disable default login mechanisms
                 .httpBasic(httpBasic -> httpBasic.disable())
-                .formLogin(form -> form.disable())
+                .formLogin(form -> form.disable());
 
-                // Add JWT authentication filter
-                .addFilterBefore(
-                        jwtAuthenticationFilter(),
-                        UsernamePasswordAuthenticationFilter.class
-                );
+        // Register JWT filter
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // Password encoder for user credentials
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // JWT authentication filter bean
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
-
-    // CORS configuration for frontend integration
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(false);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-
-        return source;
-    }
 }
+

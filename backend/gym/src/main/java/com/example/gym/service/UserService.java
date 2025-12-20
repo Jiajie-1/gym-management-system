@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.gym.dto.TrainerDTO;
 
 import java.util.List;
 
@@ -33,8 +34,15 @@ public class UserService {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
-        user.setRole(Role.MEMBER);
 
+        // Use provided role if present, otherwise default to MEMBER
+        if (dto.getRole() != null) {
+            user.setRole(dto.getRole());
+        } else {
+            user.setRole(Role.MEMBER);
+        }
+
+        // Encode password before saving
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         return toResponseDTO(userRepository.save(user));
@@ -121,6 +129,14 @@ public class UserService {
                         pageable
                 )
                 .map(this::toResponseDTO);
+    }
+
+    // Fetch trainers for course scheduling dropdown
+    public List<TrainerDTO> getAllTrainers() {
+        return userRepository.findByRole(Role.TRAINER)
+                .stream()
+                .map(u -> new TrainerDTO(u.getId(), u.getUsername()))
+                .toList();
     }
 
 }
